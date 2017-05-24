@@ -21,7 +21,7 @@ Or install it yourself as:
 $ gem install qiniu_js_rails
 ```
 
-Initialize on the config/initializes/qiniu_sdk.rb
+Initialize on the config/initializes/qiniu_js_rails.rb
 ```bash
 ::QiniuJsRails.configure do |config|
   config.storage             = :qiniu
