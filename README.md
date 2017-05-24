@@ -2,7 +2,62 @@
 integrate qiniu form upload (js-sdk, plupload-rails) and qiniu-ruby-sdk for qiniu upload
 
 ## Usage
-How to use my plugin.
+
+- init configure setup
+
+Initialize on the config/initializes/qiniu_js_rails.rb
+
+```shell
+rails generate qiniu_js_rails:install
+```
+
+```ruby
+QiniuJsRails.setup do| config |
+  unless config.configured?
+    config.qiniu_protocol = 'http'
+    config.qiniu_bucket_domain = '<your qiniu_bucket_domain>'
+    config.qiniu_bucket = '<your qiniu_bucket name>'
+    config.qiniu_access_key = '<your qiniu_access_key>'
+    config.qiniu_secret_key = '<your qiniu_secret_key>'
+    config.qiniu_styles = [ :big, :medium, :small ]
+  end
+end
+```
+
+- include QiniuJsRails::Styles to model
+
+```ruby
+class Product < ApplicationRecord
+
+  include ::QiniuJsRails::Styles
+
+  image_styles :images, model_type_method: :product_dir, model_id_method: :id
+
+  def product_dir
+    "product"
+  end
+
+end
+
+```
+
+- invoke in model
+```ruby
+p = Product.new
+p.images = "image_key_xxx.jpg!400x500"
+p.id = pid
+
+p.images_key
+p.images_keys
+p.images_small_urls
+p.images_small_url
+p.images_big_urls
+p.images_big_url
+
+# for token in controller
+policy = p.new_image_policy("new_id")
+```
+
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -19,22 +74,6 @@ $ bundle
 Or install it yourself as:
 ```bash
 $ gem install qiniu_js_rails
-```
-
-Initialize on the config/initializes/qiniu_js_rails.rb
-```bash
-::QiniuJsRails.configure do |config|
-  config.storage             = :qiniu
-  config.qiniu_access_key    = "your qiniu access_key"
-  config.qiniu_secret_key    = 'your qiniu secret_key'
-  config.qiniu_bucket        = "carrierwave-qiniu-example"
-  config.qiniu_bucket_domain = "carrierwave-qiniu-example.aspxboy.com"
-  config.qiniu_bucket_private= true #default is false
-  config.qiniu_block_size    = 4*1024*1024
-  config.qiniu_protocol      = "http"
-
-  config.qiniu_up_host       = 'http://up.qiniug.com' #七牛上传海外服务器,国内使用可以不要这行配置
-end
 ```
 
 ## Contributing

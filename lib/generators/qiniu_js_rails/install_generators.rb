@@ -9,9 +9,7 @@ module QiniuJsRails
       end
 
       def show_readme
-        if behavior == :invoke && options.bootstrap?
-          readme "README"
-        end
+        readme "README"
       end
 
     end
