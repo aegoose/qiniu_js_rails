@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = "Integrate with qiniu js sdk and plupload"
   s.license     = "MIT"
 
-  s.files = Dir["{app,config,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.require_paths = ["lib", "vendor"]
 
   s.add_dependency "rails", "~> 5.0.2"
