@@ -8,6 +8,7 @@ module QiniuJsRails
 
   autoload :Utilities
   autoload :Storage
+  autoload :Engine
   # autoload :Connection
   # autoload :Styles
 

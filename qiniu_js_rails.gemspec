@@ -7,6 +7,7 @@ require "qiniu_js_rails/version"
 Gem::Specification.new do |s|
   s.name        = "qiniu_js_rails"
   s.version     = QiniuJsRails::VERSION
+  s.platform    = Gem::Platform::RUBY
   s.authors     = ["aegoose"]
   s.email       = ["aegoose@126.com"]
   s.homepage    = "https://github.com/aegoose/qiniu_js_rails"
@@ -14,7 +15,9 @@ Gem::Specification.new do |s|
   s.description = "Integrate with qiniu js sdk and plupload"
   s.license     = "MIT"
 
-  s.files = Dir["{app,config,lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  # s.files = Dir["{app,config,lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  s.files        = `git ls-files`.split("\n")
+  s.executables  = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib", "vendor"]
 
   s.add_dependency "rails", "~> 5.0.2"
