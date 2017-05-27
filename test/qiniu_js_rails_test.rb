@@ -14,4 +14,10 @@ class QiniuJsRailsTest < ActiveSupport::TestCase
     assert_not_empty(QiniuJsRails.qiniu_connection.download_url("test_path"))
   end
 
+  # test "test require gem" do
+  #   require 'bundler'
+  #   Bundler.require :default  # <-- I expected this to load dependencies in from the gemspec
+
+  #   puts "Dependency loaded: " + defined?(Rack).inspect
+  # end
 end
