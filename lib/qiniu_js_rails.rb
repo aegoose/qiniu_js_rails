@@ -3,8 +3,9 @@
 # require "qiniu_js_rails/qiniu/style"
 # require "carrierwave/qiniu/railtie" if defined?(Rails)
 
-require 'qiniu_js_rails/engine'
-require "plupload/rails"
+require 'qiniu_js_rails/engine' if defined? Rails::Engine
+require "plupload/rails" if defined? Rails::Engine
+
 module QiniuJsRails
   extend ActiveSupport::Autoload
 
