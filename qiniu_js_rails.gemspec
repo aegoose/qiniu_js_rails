@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
@@ -18,7 +20,7 @@ Gem::Specification.new do |s|
   # s.files = Dir["{app,config,lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
-  s.require_paths = ["lib", "vendor"]
+  s.require_paths = ["lib"]
 
   s.add_dependency "rails", "~> 5.0.2"
   s.add_dependency "plupload-rails"

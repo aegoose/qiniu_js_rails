@@ -3,12 +3,15 @@
 # require "qiniu_js_rails/qiniu/style"
 # require "carrierwave/qiniu/railtie" if defined?(Rails)
 
+require 'qiniu_js_rails/engine'
+require 'qiniu_js_rails/version'
+
 module QiniuJsRails
   extend ActiveSupport::Autoload
 
   autoload :Utilities
   autoload :Storage
-  autoload :Engine
+  # autoload :Engine
   # autoload :Connection
   # autoload :Styles
 
