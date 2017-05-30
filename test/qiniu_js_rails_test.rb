@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProductController
-  include QiniuJsRails::Storage
+  include QiniuJsRails::Upload
 end
 
 class QiniuJsRailsTest < ActiveSupport::TestCase
