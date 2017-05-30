@@ -24,10 +24,6 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
 
     assert_equal(p.images_keys, ["product/#{pid}/#{pimg}"], "should have images_keys")
 
-    policy = p.new_image_policy(1)
-    assert_equal(policy.bucket, QiniuJsRails.qiniu_bucket, "policy should with bucket #{QiniuJsRails.qiniu_bucket}")
-    assert_equal(policy.key, "product/#{pid}/1.jpg", "policy should with key product/#{pid}/1.jpg")
-
   end
 
 

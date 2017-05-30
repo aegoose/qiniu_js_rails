@@ -1,5 +1,9 @@
 require 'test_helper'
 
+class ProductController
+  include QiniuJsRails::Storage
+end
+
 class QiniuJsRailsTest < ActiveSupport::TestCase
 
   test "QiniuJsRails should have mattr_accessor values" do
@@ -14,6 +18,19 @@ class QiniuJsRailsTest < ActiveSupport::TestCase
     assert_not_empty(QiniuJsRails.qiniu_connection.download_url("test_path"))
   end
 
+  test "QiniuJsRails::Storage should have policy method" do
+
+    p = ProductController.new
+    mty = "product"
+    mid = 1
+    new_id = "1.jpg"
+
+    policy = p.new_image_policy(mty, mid, new_id)
+
+    assert_equal(policy.bucket, QiniuJsRails.qiniu_bucket, "policy should with bucket #{QiniuJsRails.qiniu_bucket}")
+    assert_equal(policy.key, "product/#{mid}/#{new_id}", "policy should with key product/#{mid}/#{new_id}")
+
+  end
   # test "test require gem" do
   #   require 'bundler'
   #   Bundler.require :default  # <-- I expected this to load dependencies in from the gemspec

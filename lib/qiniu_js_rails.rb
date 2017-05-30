@@ -10,7 +10,7 @@ module QiniuJsRails
   extend ActiveSupport::Autoload
 
   autoload :Utilities
-  autoload :Storage
+  autoload :Upload
   # autoload :Engine
   # autoload :Connection
   # autoload :Styles

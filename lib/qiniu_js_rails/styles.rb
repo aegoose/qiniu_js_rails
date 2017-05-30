@@ -49,22 +49,20 @@ module QiniuJsRails
             arr.map {|elem| self.class.get_qiniu_image_path(mty, mid, elem) }
           end
 
-          def new_image_policy(new_id)
-            mid = #{column}_model_id
-            mty = #{column}_model_type
-            self.class.new_image_policy(mty, mid, new_id)
-          end
+          # def new_image_policy(new_id)
+          #   mid = #{column}_model_id
+          #   mty = #{column}_model_type
+          #   self.class.new_image_policy(mty, mid, new_id)
+          # end
 
-          def self.new_image_policy(mty, mid, new_id)
-            key = get_qiniu_image_path(mty, mid, new_id)
-            Qiniu::Auth::PutPolicy.new(
-                QiniuJsRails.qiniu_bucket, # 存储空间
-                key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
-                3600    # token 过期时间，默认为 3600 秒，即 1 小时
-            )
-
-          end
-
+          # def self.new_image_policy(mty, mid, new_id)
+          #   key = get_qiniu_image_path(mty, mid, new_id)
+          #   Qiniu::Auth::PutPolicy.new(
+          #       QiniuJsRails.qiniu_bucket, # 存储空间
+          #       key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
+          #       3600    # token 过期时间，默认为 3600 秒，即 1 小时
+          #   )
+          # end
         RUBY
 
         init_qiniu_styles(versions)
