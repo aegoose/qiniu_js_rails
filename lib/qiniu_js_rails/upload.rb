@@ -2,7 +2,7 @@ module QiniuJsRails
   module Upload
     include ::QiniuJsRails::Utilities
 
-    def new_image_policy(model_type, model_id, new_id)
+    def generate_image_policy(model_type, model_id, new_id)
         # new_id = nil
         # case model_type.to_sym
         # when :product, :product_sku, :product_content
@@ -19,5 +19,14 @@ module QiniuJsRails
         )
 
     end
+
+    def generate_image_token(model_type, model_id, new_id)
+        uptoken = nil
+        policy = generate_image_policy(model_type, model_id, new_id)
+        # puts policy.to_json if policy
+        uptoken = Qiniu::Auth.generate_uptoken(policy) if policy
+        uptoken
+    end
+
   end
 end

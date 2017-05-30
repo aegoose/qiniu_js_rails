@@ -25,10 +25,18 @@ class QiniuJsRailsTest < ActiveSupport::TestCase
     mid = 1
     new_id = "1.jpg"
 
-    policy = p.new_image_policy(mty, mid, new_id)
+    policy = p.generate_image_policy(mty, mid, new_id)
 
     assert_equal(policy.bucket, QiniuJsRails.qiniu_bucket, "policy should with bucket #{QiniuJsRails.qiniu_bucket}")
     assert_equal(policy.key, "product/#{mid}/#{new_id}", "policy should with key product/#{mid}/#{new_id}")
+
+    token0 = Qiniu::Auth.generate_uptoken(policy)
+
+    token1 = p.generate_image_token(mty, mid, new_id)
+
+    assert_not_empty(token0)
+
+    assert_equal(token0, token1)
 
   end
   # test "test require gem" do
