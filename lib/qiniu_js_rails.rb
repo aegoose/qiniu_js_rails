@@ -1,10 +1,7 @@
 # encoding: utf-8
-# require "qiniu_js_rails/qiniu/configuration"
-# require "qiniu_js_rails/qiniu/style"
-# require "carrierwave/qiniu/railtie" if defined?(Rails)
-
 require 'qiniu_js_rails/engine' if defined? Rails::Engine
 require "plupload/rails" if defined? Rails::Engine
+require "qiniu_js_rails/version"
 
 module QiniuJsRails
   extend ActiveSupport::Autoload

@@ -39,6 +39,12 @@ class QiniuJsRailsTest < ActiveSupport::TestCase
     assert_equal(token0, token1)
 
   end
+
+  test "QiniuJsRails::Version" do
+    assert_equal(QiniuJsRails::VERSION, "0.1.0")
+    # puts "---version: #{QiniuJsRails::VERSION}----"
+  end
+
   # test "test require gem" do
   #   require 'bundler'
   #   Bundler.require :default  # <-- I expected this to load dependencies in from the gemspec
