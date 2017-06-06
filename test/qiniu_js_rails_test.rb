@@ -28,7 +28,7 @@ class QiniuJsRailsTest < ActiveSupport::TestCase
     policy = p.generate_image_policy(mty, mid, new_id)
 
     assert_equal(policy.bucket, QiniuJsRails.qiniu_bucket, "policy should with bucket #{QiniuJsRails.qiniu_bucket}")
-    assert_equal(policy.key, "product/#{mid}/#{new_id}", "policy should with key product/#{mid}/#{new_id}")
+    assert_equal(policy.save_key, "product/#{mid}/#{new_id}", "policy should with key product/#{mid}/#{new_id}")
 
     token0 = Qiniu::Auth.generate_uptoken(policy)
 
