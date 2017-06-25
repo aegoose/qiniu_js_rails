@@ -37,32 +37,27 @@ module QiniuJsRails
             #{column}_keys.first
           end
 
+          # [imgkey!100x200,imgkey!300x200]
           def #{column}_keys
             # 将值进行分解 key!wxh,key!wxh
             str = #{column}
             return [] if str.nil?
 
             # str.split(",").inject([]) {|result,elem| result + e.split('-')}
-            arr = str.split(",").map{ |elem| elem.gsub(/!.*$/, '') }
-            mty = #{column}_model_type
-            mid = #{column}_model_id
-            arr.map {|elem| self.class.get_qiniu_image_path(mty, mid, elem) }
+            str.split(",").map{ |elem| elem.gsub(/!.*$/, '') }
+
           end
 
-          # def new_image_policy(new_id)
-          #   mid = #{column}_model_id
-          #   mty = #{column}_model_type
-          #   self.class.new_image_policy(mty, mid, new_id)
-          # end
+          def #{column}_path
+            #{column}_paths.first
+          end
 
-          # def self.new_image_policy(mty, mid, new_id)
-          #   key = get_qiniu_image_path(mty, mid, new_id)
-          #   Qiniu::Auth::PutPolicy.new(
-          #       QiniuJsRails.qiniu_bucket, # 存储空间
-          #       key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
-          #       3600    # token 过期时间，默认为 3600 秒，即 1 小时
-          #   )
-          # end
+          def #{column}_paths
+            mty = #{column}_model_type
+            mid = #{column}_model_id
+            #{column}_keys.map {|elem| self.class.get_qiniu_image_path(mty, mid, elem) }
+          end
+
         RUBY
 
         init_qiniu_styles(versions)
@@ -70,10 +65,16 @@ module QiniuJsRails
         get_qiniu_styles.each do |ver, value|
           class_eval <<-RUBY, __FILE__, __LINE__ + 1
             def #{column}_#{ver}_urls
-              #{column}_keys.map{|key, v| self.class.qiniu_url(:#{ver}, key) }
+              #{column}_keys.map{|key, v| #{column}_#{ver}_url(key) }
             end
             def #{column}_#{ver}_url
               #{column}_#{ver}_urls.first
+            end
+            def #{column}_#{ver}_url(key)
+              mty = #{column}_model_type
+              mid = #{column}_model_id
+              imgpath = self.class.get_qiniu_image_path(mty, mid, key)
+              self.class.qiniu_url(:#{ver}, imgpath)
             end
           RUBY
         end
