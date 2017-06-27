@@ -50,17 +50,28 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
 
     assert_equal(p.images_paths, ["product/#{pid}/#{pimg1}.jpg", "product/#{pid}/#{pimg2}"])
 
-
     assert_equal(Product.get_qiniu_styles, {big:nil, medium:nil, small:nil})
     base_url = QiniuJsRails.qiniu_protocol + "://" + QiniuJsRails.qiniu_bucket_domain
     Product.get_qiniu_styles.each do|style, value|
-
-      assert_equal(p.send(:"images_#{style}_urls"), p.images_paths.map{|x| "#{base_url}/#{x}-#{style}"})
-
+        assert_equal(p.send(:"images_#{style}_urls"), p.images_paths.map{|x| "#{base_url}/#{x}-#{style}"})
     end
 
   end
 
+  test "product instance should have images_objects methods" do
+    pid = 10
+    pimg1 = "abc"
+    pimg2 = "def.jpg"
+    p = Product.new
+    p.images = "#{pimg1}!400x800,#{pimg2}!500x800"
+    p.id = pid
+
+    imgs =  p.images_objects
+    assert_equal(imgs.size, 2)
+    assert_equal(imgs[0].keys, [:key, :big, :medium, :small])
+    assert_equal(imgs[1].keys, [:key, :big, :medium, :small])
+    # puts "---images_objects: #{p.images_objects}----"
+  end
 
 end
 

@@ -79,6 +79,22 @@ module QiniuJsRails
           RUBY
         end
 
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          def #{column}_objects
+            mty = #{column}_model_type
+            mid = #{column}_model_id
+            #{column}_keys.map do |key|
+              imgobj = {key:key}
+              self.class.get_qiniu_styles.each do |ver, value|
+                imgpath = self.class.get_qiniu_image_path(mty, mid, key)
+                imgobj[ver] = self.class.qiniu_url(ver, imgpath)
+              end
+              imgobj
+            end
+
+          end
+        RUBY
+
         include ::QiniuJsRails::Styles::LocalInstanceMethods
 
       end
