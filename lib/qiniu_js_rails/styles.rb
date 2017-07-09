@@ -84,9 +84,9 @@ module QiniuJsRails
             mty = #{column}_model_type
             mid = #{column}_model_id
             #{column}_keys.map do |key|
-              imgobj = {key:key}
+              imgpath = self.class.get_qiniu_image_path(mty, mid, key)
+              imgobj = {key:key, path:imgpath}
               self.class.get_qiniu_styles.each do |ver, value|
-                imgpath = self.class.get_qiniu_image_path(mty, mid, key)
                 imgobj[ver] = self.class.qiniu_url(ver, imgpath)
               end
               imgobj
@@ -101,11 +101,11 @@ module QiniuJsRails
 
       # private
       def get_qiniu_styles
-        @_qiniu_styles
+        @@_qiniu_styles || {}
       end
 
       def init_qiniu_styles(versions=nil)
-          @_qiniu_styles = {}
+          _styles = {}
           in_styles = nil
           if versions
             # Set custom styles
@@ -116,11 +116,11 @@ module QiniuJsRails
           end
 
           if in_styles.is_a? Array
-            @_qiniu_styles = in_styles.map { |version| [version.to_sym, nil] }.to_h
+            _styles = in_styles.map { |version| [version.to_sym, nil] }.to_h
           elsif in_styles.is_a? Hash
-            @_qiniu_styles = in_styles.symbolize_keys
+            _styles = in_styles.symbolize_keys
           end
-
+          @@_qiniu_styles = _styles
       end
 
       def qiniu_url(ver, key_path)

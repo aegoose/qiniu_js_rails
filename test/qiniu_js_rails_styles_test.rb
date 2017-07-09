@@ -68,9 +68,16 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
 
     imgs =  p.images_objects
     assert_equal(imgs.size, 2)
-    assert_equal(imgs[0].keys, [:key, :big, :medium, :small])
-    assert_equal(imgs[1].keys, [:key, :big, :medium, :small])
+    assert_equal(imgs[0].keys, [:key, :path, :big, :medium, :small])
+    assert_equal(imgs[1].keys, [:key, :path, :big, :medium, :small])
     # puts "---images_objects: #{p.images_objects}----"
+  end
+
+  test 'product sub model should have get_qiniu_styles' do
+    class P1 < Product; end
+    assert_not_nil(P1.get_qiniu_styles)
+    assert_not_empty(P1.get_qiniu_styles)
+    assert_equal(P1.get_qiniu_styles.keys, [:big, :medium, :small])
   end
 
 end
