@@ -58,7 +58,6 @@ module QiniuJsRails
 
             # str.split(",").inject([]) {|result,elem| result + e.split('-')}
             str.split(",").map{ |elem| elem.gsub(/!.*$/, '') }
-
           end
 
           def #{column}_path
@@ -69,6 +68,12 @@ module QiniuJsRails
             mty = #{column}_model_type
             mid = #{column}_model_id
             #{column}_keys.map {|elem| self.class.get_qiniu_image_path(mty, mid, elem) }
+          end
+
+          def #{column}_path_by_key(key)
+            mty = #{column}_model_type
+            mid = #{column}_model_id
+            self.class.get_qiniu_image_path(mty, mid, key)
           end
 
         RUBY
@@ -163,11 +168,13 @@ module QiniuJsRails
         QiniuJsRails.qiniu_connection
       end
 
+      def delete_qiniu_image(path)
+        qiniu_connection.delete(path) if path
+      end
+
       ## 删除云图片
-      def delete_images
-        image_keys.each do | key |
-          self.class.qiniu_connection.delete(key)
-        end
+      def delete_qiniu_images(paths)
+        paths&.each {|path| delete_qiniu_image(path) }
       end
     end
   end

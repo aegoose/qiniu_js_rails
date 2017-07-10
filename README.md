@@ -49,11 +49,19 @@ p.id = pid
 
 p.images_key
 p.images_path
+p.images_path(key)
 p.images_keys
+
 p.images_small_urls
 p.images_small_url
 p.images_big_urls
 p.images_big_url
+p.images_small_url(key)
+p.images_big_url(key)
+
+# key will delete after save
+p.deleted_images
+p.clear_deleted_images
 
 # [{key:xxx,path:/product/1/xxx.jpg,small:http://..., big:http://...}]
 p.images_objects

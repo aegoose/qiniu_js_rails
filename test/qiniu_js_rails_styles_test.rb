@@ -23,9 +23,8 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
     assert_equal(p.images_key, "#{pimg}", "should have images_key")
 
     assert_equal(p.images_keys, ["#{pimg}"], "should have images_keys")
-
     assert_equal(p.images_path, "product/#{pid}/#{pimg}", "should have images_path")
-
+    assert_equal(p.images_path_by_key("#{pimg}"), "product/#{pid}/#{pimg}", "should have images_path_by_key")
     assert_equal(p.images_paths, ["product/#{pid}/#{pimg}"], "should have images_paths")
 
   end
@@ -84,7 +83,9 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
     pid = 10
     pimg1 = "abc"
     pimg2 = "def.jpg"
+
     p = Product.new
+    p.id = pid
     p.images = "#{pimg1},#{pimg2}"
     assert_equal p.deleted_images, []
     p.images = "#{pimg1}"
@@ -94,6 +95,17 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
 
     p.clear_deleted_images
     assert_equal p.deleted_images, []
+  end
+
+  test 'product should have delete_qiniu_image methods' do
+    p = Product.new
+    p.images = "abc"
+    p.id = 1
+    assert(p.methods.include?(:delete_qiniu_image))
+    assert(p.methods.include?(:delete_qiniu_images))
+    path = p.images_path_by_key('abc')
+    puts "-------#{path}"
+    p.delete_qiniu_image(path)
   end
 
 end
