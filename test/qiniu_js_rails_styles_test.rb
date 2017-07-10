@@ -80,6 +80,22 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
     assert_equal(P1.get_qiniu_styles.keys, [:big, :medium, :small])
   end
 
+  test 'product should have deleted_images' do
+    pid = 10
+    pimg1 = "abc"
+    pimg2 = "def.jpg"
+    p = Product.new
+    p.images = "#{pimg1},#{pimg2}"
+    assert_equal p.deleted_images, []
+    p.images = "#{pimg1}"
+    assert_equal p.deleted_images, [pimg2]
+    p.images = nil
+    assert_equal p.deleted_images, [pimg2, pimg1]
+
+    p.clear_deleted_images
+    assert_equal p.deleted_images, []
+  end
+
 end
 
 

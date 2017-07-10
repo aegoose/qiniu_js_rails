@@ -21,7 +21,20 @@ module QiniuJsRails
         class_eval <<-RUBY, __FILE__, __LINE__+1
 
           def #{column}; super; end
-          def #{column}=(image_keys); super(image_keys); end
+          def deleted_#{column}
+            @deleted_#{column} || []
+          end
+          def clear_deleted_#{column}
+            @deleted_#{column} = nil
+          end
+          def #{column}=(split_str)
+            olds = #{column}&.split(",") || []
+            news = split_str&.split(",") || []
+            deletes = deleted_#{column} + olds
+            deletes -= news
+            @deleted_#{column} =  deletes.uniq
+            super(split_str)
+          end
 
           def #{column}_model_type
             raise UnknowMethodError.new unless self.methods.include? :#{model_type_method}
