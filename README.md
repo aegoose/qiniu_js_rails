@@ -48,11 +48,15 @@ p.images = "image_key_xxx.jpg!400x500"
 p.id = pid
 
 p.images_key
+p.images_path
 p.images_keys
 p.images_small_urls
 p.images_small_url
 p.images_big_urls
 p.images_big_url
+
+# [{key:xxx,path:/product/1/xxx.jpg,small:http://..., big:http://...}]
+p.images_objects
 
 # for token in controller
 policy = p.new_image_policy("new_id")
@@ -63,7 +67,8 @@ policy = p.new_image_policy("new_id")
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'qiniu_js_rails'
+# gem 'qiniu_js_rails'
+gem 'qiniu_js_rails', git: 'https://github.com/aegoose/qiniu_js_rails.git'
 ```
 
 And then execute:
