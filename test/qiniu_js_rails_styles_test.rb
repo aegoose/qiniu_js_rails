@@ -98,14 +98,47 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
   end
 
   test 'product should have delete_qiniu_image methods' do
+    Product.class_eval do
+      def delete_qiniu_image(path)
+        return path if path
+      end
+    end
+
     p = Product.new
     p.images = "abc"
     p.id = 1
     assert(p.methods.include?(:delete_qiniu_image))
     assert(p.methods.include?(:delete_qiniu_images))
     path = p.images_path_by_key('abc')
-    puts "-------#{path}"
-    p.delete_qiniu_image(path)
+    assert_equal(path, p.delete_qiniu_image(path))
+
+    p.images = "kkk!100x200,mmm!300x400"
+    path2 = [p.images_path_by_key('kkk'), p.images_path_by_key('mmm')]
+    assert_equal(path2, p.delete_qiniu_images(p.images_paths))
+
+  end
+
+  test 'product should have flush_deleted_images and delete_all_images' do
+    Product.class_eval do
+      def delete_qiniu_image(path)
+        return path if path
+      end
+    end
+
+    p = Product.new
+    p.id = 1
+    assert(p.methods.include?(:flush_deleted_images))
+    assert(p.methods.include?(:delete_all_images))
+
+    p.images = "abc"
+    p.images = "ddd!800x800,ccc"
+    assert_equal [p.images_path_by_key('abc'), p.images_path_by_key('ddd'), p.images_path_by_key('ccc')], p.delete_all_images
+
+    p.images = "mmm"
+    p.clear_deleted_images
+    p.images = "nnn"
+    assert_equal [p.images_path_by_key('mmm')], p.flush_deleted_images
+
   end
 
 end

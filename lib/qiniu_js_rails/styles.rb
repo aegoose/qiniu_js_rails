@@ -21,19 +21,14 @@ module QiniuJsRails
         class_eval <<-RUBY, __FILE__, __LINE__+1
 
           def #{column}; super; end
-          def deleted_#{column}
-            @deleted_#{column} || []
-          end
-          def clear_deleted_#{column}
-            @deleted_#{column} = nil
-          end
           def #{column}=(split_str)
-            olds = #{column}&.split(",") || []
-            news = split_str&.split(",") || []
-            deletes = deleted_#{column} + olds
-            deletes -= news
+            olds = #{column}_keys # 取旧的
+            super(split_str) # 更新值
+            news = #{column}_keys # 取新的
+            # 数组的差集操作
+            deletes = deleted_#{column} + olds - news
             @deleted_#{column} =  deletes.uniq
-            super(split_str)
+            # super(split_str)
           end
 
           def #{column}_model_type
@@ -74,6 +69,33 @@ module QiniuJsRails
             mty = #{column}_model_type
             mid = #{column}_model_id
             self.class.get_qiniu_image_path(mty, mid, key)
+          end
+
+          ### 图片删除相关 ###
+
+          def deleted_#{column}
+            @deleted_#{column} || []
+          end
+          def clear_deleted_#{column}
+            @deleted_#{column} = nil
+          end
+
+          def flush_deleted_#{column}
+            paths = deleted_#{column}.map do |key|
+               delete_qiniu_image #{column}_path_by_key(key)
+            end
+            clear_deleted_#{column}
+            paths
+          end
+
+          def delete_all_images
+            # 清除掉更新的
+            paths1 = flush_deleted_#{column}
+            # 清除掉正在变化的
+            paths = #{column}_paths || []
+            delete_qiniu_images paths
+
+            paths1 + paths
           end
 
         RUBY
@@ -170,11 +192,12 @@ module QiniuJsRails
 
       def delete_qiniu_image(path)
         qiniu_connection.delete(path) if path
+        path
       end
 
       ## 删除云图片
       def delete_qiniu_images(paths)
-        paths&.each {|path| delete_qiniu_image(path) }
+        paths&.map {|path| delete_qiniu_image(path) }
       end
     end
   end

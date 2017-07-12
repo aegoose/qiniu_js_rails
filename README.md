@@ -62,6 +62,8 @@ p.images_big_url(key)
 # key will delete after save
 p.deleted_images
 p.clear_deleted_images
+p.flush_deleted_images  # will clear_deleted_images, used for before_action
+p.delete_all_images     # will clear_deleted_images, keep p.images, used for before_destroy
 
 # [{key:xxx,path:/product/1/xxx.jpg,small:http://..., big:http://...}]
 p.images_objects
