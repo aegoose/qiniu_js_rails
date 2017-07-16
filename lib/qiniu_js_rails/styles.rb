@@ -26,8 +26,8 @@ module QiniuJsRails
             super(split_str) # 更新值
             news = #{column}_keys # 取新的
             # 数组的差集操作
-            deletes = deleted_#{column} + olds - news
-            @deleted_#{column} =  deletes.uniq
+            deletes = deleted_images + olds - news
+            @deleted_images =  deletes.uniq
             # super(split_str)
           end
 
@@ -73,24 +73,24 @@ module QiniuJsRails
 
           ### 图片删除相关 ###
 
-          def deleted_#{column}
-            @deleted_#{column} || []
+          def deleted_images
+            @deleted_images || []
           end
-          def clear_deleted_#{column}
-            @deleted_#{column} = nil
+          def clear_deleted_images
+            @deleted_images = nil
           end
 
-          def flush_deleted_#{column}
-            paths = deleted_#{column}.map do |key|
+          def flush_deleted_images
+            paths = deleted_images.map do |key|
                delete_qiniu_image #{column}_path_by_key(key)
             end
-            clear_deleted_#{column}
+            clear_deleted_images
             paths
           end
 
           def delete_all_images
             # 清除掉更新的
-            paths1 = flush_deleted_#{column}
+            paths1 = flush_deleted_images
             # 清除掉正在变化的
             paths = #{column}_paths || []
             delete_qiniu_images paths
