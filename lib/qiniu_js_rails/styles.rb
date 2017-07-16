@@ -108,7 +108,7 @@ module QiniuJsRails
               #{column}_keys.map{|key, v| #{column}_#{ver}_url(key) }
             end
             def #{column}_#{ver}_url
-              #{column}_#{ver}_urls.first
+              #{column}_#{ver}_urls&.first
             end
             def #{column}_#{ver}_url(key)
               mty = #{column}_model_type
