@@ -104,18 +104,23 @@ module QiniuJsRails
 
         get_qiniu_styles.each do |ver, value|
           class_eval <<-RUBY, __FILE__, __LINE__ + 1
+            def get_#{column}_#{ver}_url(key)
+              imgurl = nil
+              if key
+                mty = #{column}_model_type
+                mid = #{column}_model_id
+                imgpath = self.class.get_qiniu_image_path(mty, mid, key)
+                imgurl = self.class.qiniu_url(:#{ver}, imgpath)
+              end
+              imgurl
+            end
             def #{column}_#{ver}_urls
-              #{column}_keys.map{|key, v| #{column}_#{ver}_url(key) }
+              #{column}_keys.map{|key| get_#{column}_#{ver}_url(key) }
             end
             def #{column}_#{ver}_url
               #{column}_#{ver}_urls&.first
             end
-            def #{column}_#{ver}_url(key)
-              mty = #{column}_model_type
-              mid = #{column}_model_id
-              imgpath = self.class.get_qiniu_image_path(mty, mid, key)
-              self.class.qiniu_url(:#{ver}, imgpath)
-            end
+
           RUBY
         end
 

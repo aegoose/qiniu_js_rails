@@ -29,6 +29,23 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
 
   end
 
+  test "product should not raise error when empty" do
+    p = Product.new
+    assert_nil(p.images_key)
+    assert_equal(p.images_keys, [])
+
+    assert_nil(p.images_path)
+    assert_equal(p.images_paths, [])
+
+    assert_nil(p.images_medium_url)
+    assert_equal(p.images_medium_urls, [])
+
+    assert_nil(p.images_big_url)
+    assert_equal(p.images_big_urls, [])
+
+    assert_nil(p.images_small_url)
+    assert_equal(p.images_small_urls, [])
+  end
 
   test "product instance should have sevrial images thumb methods" do
 
@@ -142,9 +159,6 @@ class QiniuJsRailsStylesTest < ActiveSupport::TestCase
   end
 
 end
-
-
-
 
 
 
